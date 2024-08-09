@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "BMI",
+              "BMI Calculator",
               style: TextStyle(
                 fontSize: 34,
                 fontWeight: FontWeight.w600,
@@ -96,20 +96,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 var inch = inchController.text.toString();
 
                 if (wt.isNotEmpty && ft.isNotEmpty && inch.isNotEmpty) {
-                  double weight = double.parse(wt);
-                  double feet = double.parse(ft);
-                  double inches = double.parse(inch);
+                  try {
+                    double weight = double.parse(wt);
+                    double feet = double.parse(ft);
+                    double inches = double.parse(inch);
 
-                  // Convert height to meters
-                  double totalInches = (feet * 12) + inches;
-                  double heightInMeters = totalInches * 0.0254;
+                    // Convert height to meters
+                    double totalInches = (feet * 12) + inches;
+                    double heightInMeters = totalInches * 0.0254;
 
-                  // Calculate BMI
-                  double bmi = weight / (heightInMeters * heightInMeters);
+                    // Calculate BMI
+                    double bmi = weight / (heightInMeters * heightInMeters);
 
-                  setState(() {
-                    result = "Your BMI is ${bmi.toStringAsFixed(2)}";
-                  });
+                    setState(() {
+                      result = "Your BMI is ${bmi.toStringAsFixed(2)}";
+                    });
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Please enter valid numeric values!"),
+                    ));
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("All fields are mandatory!"),
@@ -119,14 +125,19 @@ class _MyHomePageState extends State<MyHomePage> {
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 textStyle: TextStyle(fontSize: 18),
-                primary: Theme.of(context).colorScheme.primary,
-                onPrimary: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
               ),
               child: Text('Calculate'),
             ),
+            SizedBox(height: 16),
             Text(
               result,
-              style: TextStyle(fontWeight: FontWeight.w400),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ],
         ),
